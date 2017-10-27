@@ -33,10 +33,14 @@ import android.test.ActivityInstrumentationTestCase2;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.equalTo;
@@ -150,4 +154,62 @@ public class LongListActivityTest {
     private static DataInteraction onRow(String str) {
         return onData(hasEntry(equalTo(LongListActivity.ROW_TEXT), is(str)));
     }
+
+
+    /* My tests */
+
+    @Test
+    public void scroll_To() {
+        // Scroll to.
+        onRow("item: 65").perform(scrollTo());
+    }
+
+    @Test
+    public void scroll_ToAndClick() {
+        // Scroll to.
+        onRow("item: 65").perform(scrollTo());
+
+        // Press button.
+        onRow("item: 65").onChildView(withId(R.id.rowToggleButton)).perform(click());
+    }
+
+    @Test
+    public void scroll_ToAndCheck() {
+        // Scroll to.
+        onRow("item: 65").perform(scrollTo());
+
+        // Press button.
+        onRow("item: 65").onChildView(withId(R.id.rowToggleButton)).perform(click());
+
+        // Check that button was pressed.
+        onRow("item: 65").onChildView(withId(R.id.rowToggleButton)).check(matches(isChecked()));
+    }
+
+    @Test
+    public void scroll_ToAndNotCheck() {
+        // Scroll to.
+        onRow("item: 65").perform(scrollTo());
+
+        // Check that button was not pressed.
+        onRow("item: 65").onChildView(withId(R.id.rowToggleButton)).check(matches(isNotChecked()));
+    }
+
+    @Test
+    public void swipe_Down() {
+        // Scroll to.
+        onRow("item: 65").perform(scrollTo());
+
+        // Swipe down.
+        swipeDown();
+    }
+
+    @Test
+    public void swipe_Up() {
+        // Scroll to.
+        onRow("item: 65").perform(scrollTo());
+
+        // Swipe up.
+        swipeUp();
+    }
+
 }

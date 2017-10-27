@@ -30,8 +30,15 @@ import android.support.test.filters.LargeTest;
 import android.test.ActivityInstrumentationTestCase2;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.doubleClick;
+import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.pressBack;
+import static android.support.test.espresso.action.ViewActions.pressMenuKey;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -86,4 +93,72 @@ public class ChangeTextBehaviorTest {
         // This view is in a different Activity, no need to tell Espresso.
         onView(withId(R.id.show_text_view)).check(matches(withText(STRING_TO_BE_TYPED)));
     }
+
+
+    /* My tests */
+
+    @Test
+    public void changeText_replaceText() {
+        // Replace text and then press the button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(replaceText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(click());
+
+        // Check that the text was changed.
+        onView(withId(R.id.textToBeChanged)).check(matches(withText(STRING_TO_BE_TYPED)));
+    }
+
+    @Test
+    public void changeText_clearText() {
+        // Type text, clear text, type text and then press the button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.editTextUserInput))
+                .perform(clearText());
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(click());
+
+        // Check that the text was changed.
+        onView(withId(R.id.textToBeChanged)).check(matches(withText(STRING_TO_BE_TYPED)));
+    }
+
+    @Test
+    public void changeText_doubleClick() {
+        // Type text and then double click the button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(doubleClick());
+    }
+
+    @Test
+    public void changeText_longClick() {
+        // Type text and then long click the button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(longClick());
+    }
+
+    @Test
+    public void changeText_pressBack() {
+        // Type text and then press button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(click());
+
+        //Press back.
+        pressBack();
+    }
+
+    @Test
+    public void changeText_pressMenuKey() {
+        // Type text and then press button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(click());
+
+        //Press menu key.
+        pressMenuKey();
+    }
+
 }
